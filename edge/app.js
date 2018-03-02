@@ -5,7 +5,7 @@ const sense = require("sense-hat-led").sync;
 const mqtt = require('mqtt');
 const os = require('os');
 
-const iotHubEndpoint = process.env.iotHubEndpoint || 'sakkuru-iot-hub.azure-devices.net';
+const iotHubEndpoint = process.env.iotHubEndpoint || 'xxx.azure-devices.net';
 const deviceId = process.env.deviceId || 'raspi01';
 const mqttServer = process.env.mqttServer || 'mqtt://beam.soracom.io';
 

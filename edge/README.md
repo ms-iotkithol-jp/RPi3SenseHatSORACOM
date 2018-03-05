@@ -4,5 +4,5 @@
 
 ```
 npm install
-iotHubEndpoint='<IoT Hub Name>.azure-devices.net' deviceId='<Device ID>' mqttServer='<MQTT broker server>' node app.js
+deviceId='<Device ID>' mqttServer='<MQTT broker server>' node app.js
 ```

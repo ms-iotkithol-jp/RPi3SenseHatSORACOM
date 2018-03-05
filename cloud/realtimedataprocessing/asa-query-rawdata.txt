@@ -1,0 +1,9 @@
+SELECT
+    IoTHub.ConnectionDeviceId as deviceId,
+    *
+INTO
+    [rawdata]
+FROM
+    [sensor]
+TIMESTAMP BY [sensor].time
+

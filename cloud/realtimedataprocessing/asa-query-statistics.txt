@@ -1,0 +1,10 @@
+-- statistics
+SELECT
+    IoTHub.ConnectionDeviceId as deviceId,
+    Avg(temperature) as tempAvg, Avg(humidity) as humAvg,
+    Avg(accelx) as accelxAvg, Min(accelx) as accelxMin, Max(accelx) as accelxMax,
+    Avg(accely) as accelyAvg, Min(accely) as accelyMin, Max(accely) as accelyMax,
+    Avg(accelz) as accelzAvg, Min(accelz) as accelzMin, Max(accelz) as accelzMax
+INTO [statistics] FROM [sensor]
+TIMESTAMP BY [sensor].time
+GROUP BY IoTHub.ConnectionDeviceId, TUMBLINGWINDOW (second,15);

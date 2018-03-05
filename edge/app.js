@@ -54,16 +54,17 @@ client.on('message', (topic, message) => {
 
 const methods = {
     'led': (rid, args) => {
+        if (!args.color) return;
         matrix.clear(args.color);
         const topic = pubMethodResponseTopic.replace("{status}", 200) + rid;
-        client.publish(topic, JSON.stringify("red!!"));
+        client.publish(topic, "Changed LED color to" + args.color);
     },
     'random': (rid, args) => {
         const randInt = max => {
             return Math.floor(Math.random() * (max + 1));
         }
         const topic = pubMethodResponseTopic.replace("{status}", 200) + rid;
-        client.publish(topic, JSON.stringify("randome!!"));
+        client.publish(topic, JSON.stringify("Random!!"));
         for (let i = 0; i < 1000; i++) {
             x = randInt(7);
             y = randInt(7);
@@ -77,32 +78,38 @@ const methods = {
     'red': (rid, args) => {
         matrix.clear([255, 0, 0]);
         const topic = pubMethodResponseTopic.replace("{status}", 200) + rid;
-        client.publish(topic, JSON.stringify("red!!"));
+        client.publish(topic, "Red!!");
     },
     'white': (rid, args) => {
         matrix.clear([255, 255, 255]);
         const topic = pubMethodResponseTopic.replace("{status}", 200) + rid;
-        client.publish(topic, JSON.stringify("white!!"));
+        client.publish(topic, "White!!");
     },
     'batsu': (rid, args) => {
         matrix.setPixels(cross);
         const topic = pubMethodResponseTopic.replace("{status}", 200) + rid;
-        client.publish(topic, JSON.stringify("batsu!!"));
+        client.publish(topic, "Batsu!!");
     }
 };
 
 const desiredHandler = (version, desired) => {
     if (desired && desired["telemetry-cycle-ms"] && 100 < Number(desired["telemetry-cycle-ms"])) {
-        console.log('change telemetry-cycle-ms', delay, 'to', desired["telemetry-cycle-ms"]);
         if (sendDataTimer) clearInterval(sendDataTimer);
         delay = Number(desired["telemetry-cycle-ms"]);
         sendSensorData(delay);
+        console.log('Successfully changed telemetry-cycle-ms', delay, 'to', desired["telemetry-cycle-ms"]);
+        sense.setPixel(0, 1, 0, 255, 255);
+        sense.sleep(0.5);
+        sense.setPixel(0, 1, 0, 0, 0);
     }
 };
 
 const sendMessage = message => {
     if (typeof message != 'string') message = JSON.stringify(message);
     client.publish(pubMessageTopic, message);
+    sense.setPixel(0, 0, 255, 255, 0);
+    sense.sleep(0.5);
+    sense.setPixel(0, 0, 0, 0, 0);
 };
 
 const sendReportProperty = message => {

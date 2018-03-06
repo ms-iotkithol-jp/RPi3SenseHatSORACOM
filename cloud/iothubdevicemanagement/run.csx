@@ -12,7 +12,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     {
         log.Info("args="+args);
     }
-    string connectionString = "HostName=EGIoTHub20180308.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=o6xQfjn5mo51NoQ23OM2VUciyLHfNfZhPld+4l5QX8k=";
+    string connectionString = "[Connection String for your Device Id]";
     string result = "parameter format: ?mode=[regist|remove|info|c2d|desired]&deviceId=xxxxx&args=url-encoded-string";
 
     if ((!string.IsNullOrEmpty(mode)) && (!string.IsNullOrEmpty(deviceId)))

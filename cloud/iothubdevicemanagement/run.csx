@@ -12,8 +12,9 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
     {
         log.Info("args="+args);
     }
-    string connectionString = "[Connection String for your Device Id]";
+    string connectionString = "[Connection String of iothubowner]";
     string result = "parameter format: ?mode=[regist|remove|info|c2d|desired]&deviceId=xxxxx&args=url-encoded-string";
+    HttpStatusCode resultCode = HttpStatusCode.OK;
 
     if ((!string.IsNullOrEmpty(mode)) && (!string.IsNullOrEmpty(deviceId)))
     {
@@ -83,6 +84,7 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
                         status = "args is needed"
                     };
                     result = Newtonsoft.Json.JsonConvert.SerializeObject(sendInfo);
+                    resultCode = HttpStatusCode.BadRequest;
                 }
                 log.Info(result);
                 break;
@@ -124,6 +126,10 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceW
                 break;
         }
     }
+    else
+    {
+        resultCode = HttpStatusCode.BadRequest;
+    }
 
-    return new HttpResponseMessage(HttpStatusCode.OK);
+    return req.CreateResponse(resultCode, result);
 }

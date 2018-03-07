@@ -10,7 +10,7 @@ npm start
 # When specifying Device ID or MQTT broker server
 deviceId='<Device ID>' mqttServer='<MQTT broker server>' node app.js
 
-# If you want to daemonize the app
+# If you want to automatically restart the app
 npm install -g pm2
 pm2 start app.js
 ```

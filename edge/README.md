@@ -13,4 +13,11 @@ deviceId='<Device ID>' mqttServer='<MQTT broker server>' node app.js
 # If you want to automatically restart the app
 npm install -g pm2
 pm2 start app.js
+
+```
+
+## How to build a zip package
+```
+npm run-script build
+sudo cp app.zip /boot/
 ```

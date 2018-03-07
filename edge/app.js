@@ -5,7 +5,7 @@ const sense = require("sense-hat-led").sync;
 const mqtt = require('mqtt');
 const os = require('os');
 
-const deviceId = process.env.deviceId || 'raspberry';
+const deviceId = process.env.deviceId || 'raspberrypi';
 const mqttServer = process.env.mqttServer || 'mqtt://beam.soracom.io';
 
 const pubMessageTopic = `devices/${deviceId}/messages/events/`;
@@ -39,7 +39,33 @@ const getSensorData = () => {
 
 client.on('message', (topic, message) => {
     console.log('message:', topic, message.toString());
-    if (topic.includes("$iothub/methods/POST/")) {
+    let msg = "";
+    if (topic.includes("devicebound")) {
+        try {
+            msg = JSON.parse(message.toString());
+        } catch (e) {
+            console.log(e);
+            return;
+        }
+
+        if (msg && msg.led) {
+            let color16 = msg.led;
+            if (color16[0] === "#") {
+                color16 = msg.led.slice(1);
+            }
+            let r, g, b;
+            try {
+                r = parseInt(color16.slice(0, 2), 16);
+                g = parseInt(color16.slice(2, 4), 16);
+                b = parseInt(color16.slice(4, 6), 16);
+            } catch (e) {
+                console.log(e);
+                return;
+            }
+            console.log(r, g, b);
+            matrix.clear([r, g, b]);
+        }
+    } else if (topic.includes("$iothub/methods/POST/")) {
         const methodName = topic.split("$iothub/methods/POST/")[1].split("/")[0];
         const rid = topic.split("=")[1];
         const args = JSON.parse(message.toString());

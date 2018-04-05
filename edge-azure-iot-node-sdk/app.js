@@ -2,9 +2,21 @@ const imu = require('node-sense-hat').Imu;
 const IMU = new imu.IMU();
 const matrix = require('node-sense-hat').Leds;
 const sense = require("sense-hat-led").sync;
+// const mqtt = require('mqtt');
 const os = require('os');
 
 const deviceId = process.env.deviceId || 'raspberrypi';
+// const mqttServer = process.env.mqttServer || 'mqtt://beam.soracom.io';
+
+// const pubMessageTopic = `devices/${deviceId}/messages/events/`;
+// const subMessageTopic = `devices/${deviceId}/messages/devicebound/#`;
+
+// const subTwinDesiredTopic = `$iothub/twin/PATCH/properties/desired/#`;
+// const pubTwinReportedTopic = `$iothub/twin/PATCH/properties/reported/?$rid=`;
+// const subTwinResponseTopic = `$iothub/twin/res/#`;
+
+// const subMethodTopic = '$iothub/methods/POST/#';
+// const pubMethodResponseTopic = `$iothub/methods/res/{status}/?$rid=`;
 
 if (process.argv.length != 3) {
     console.error('node app.js <connection string for device>');
@@ -57,9 +69,7 @@ client.open(function(err) {
 
         for (method in methods) {
             console.log('Regist method', method);
-            client.onDeviceMethod(method, function(request, response) {
-                methods[method](request, response);
-            });
+            client.onDeviceMethod(method, methods[method]);
         }
 
         client.on('message', function(message) {

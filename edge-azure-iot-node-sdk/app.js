@@ -74,10 +74,12 @@ client.open(function(err) {
 
         client.on('message', function(message) {
             console.log('message:', message.messageId, ':', message.data);
+            var msgText = new Buffer(message.data).toString('ascii');
             client.complete(message, printResultFor('completed'));
             try {
                 msg = JSON.parse(message.data.toString());
             } catch (e) {
+                sense.showMessage(msgText, 0.1, [255, 255, 255], [50, 50, 50]);
                 console.log(e);
                 return;
             }
@@ -237,9 +239,11 @@ const cross = [
 
 // Helper function to print results in the console
 
+var sendIndex = 0;
+
 function printResultFor(op) {
     return function printResult(err, res) {
         if (err) console.log(op + ' error: ' + err.toString());
-        if (res) console.log(op + ' status: ' + res.constructor.name);
+        if (res) console.log(op + ' status: ' + res.constructor.name + '[' + sendIndex++ + ']');
     };
 }

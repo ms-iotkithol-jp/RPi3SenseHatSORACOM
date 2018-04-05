@@ -1,0 +1,18 @@
+{
+    "name": "azure-iothub-mqtt-sample",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "build": "zip -9r app.zip package.json app.js node_modules"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "dotenv": "^5.0.1",
+        "mqtt": "^2.16.0",
+        "node-sense-hat": "0.0.2",
+        "sense-hat-led": "^1.0.1"
+    }
+}

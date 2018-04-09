@@ -84,22 +84,27 @@ client.open(function(err) {
                 return;
             }
 
-            if (msg && msg.led) {
-                let color16 = msg.led;
-                if (color16[0] === "#") {
-                    color16 = msg.led.slice(1);
+            if (msg) {
+                if (msg.led) {
+                    let color16 = msg.led;
+                    if (color16[0] === "#") {
+                        color16 = msg.led.slice(1);
+                    }
+                    let r, g, b;
+                    try {
+                        r = parseInt(color16.slice(0, 2), 16);
+                        g = parseInt(color16.slice(2, 4), 16);
+                        b = parseInt(color16.slice(4, 6), 16);
+                    } catch (e) {
+                        console.log(e);
+                        return;
+                    }
+                    console.log(r, g, b);
+                    matrix.clear([r, g, b]);
                 }
-                let r, g, b;
-                try {
-                    r = parseInt(color16.slice(0, 2), 16);
-                    g = parseInt(color16.slice(2, 4), 16);
-                    b = parseInt(color16.slice(4, 6), 16);
-                } catch (e) {
-                    console.log(e);
-                    return;
+                if (msg.text) {
+                    sense.showMessage(msg.content, 0.1, [255, 255, 255], [50, 50, 50]);
                 }
-                console.log(r, g, b);
-                matrix.clear([r, g, b]);
             }
         });
     }
